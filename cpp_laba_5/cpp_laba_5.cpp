@@ -1,91 +1,122 @@
 ﻿#include <iostream>
+#include <string>
 using namespace std;
 #define SIZE 10
 
 class List {
 protected:
-    int* arr;
-    int capasity; //вместимость
-    int top;
+    void** arr;
+    int last;
+    int capasity;
 
 public:
-    List(int size = SIZE) { //конструктор
-        arr = new int[size];
+    List(int size = SIZE) {
+        arr = new void*[size]; //создание массива указателей
         capasity = size;
-        top = -1;
-    }
-    ~List() { //деструктор
-        delete[] arr;
+        last = -1; //элемента с индексом 0 нет - массив пуст
     }
 
-    void push(int elem) { //добавить элемент
+    template <typename T>
+    void push(T elem) { //добавить элемент
         if (isFull()) {
             cout << "Overflow\nProgram Terminated\n";
             exit(EXIT_FAILURE);
         }
 
-        cout << "Insearting " << elem << endl;
-        arr[++top] = elem;
+        cout << "Insearting " << *elem << endl;
+        arr[++last] = elem;
+    }
+
+    int returnSize() {
+        return last + 1;
     }
 
     bool isFull() {
-        return top == capasity - 1;
+        return last == capasity - 1;
     }
     bool isEmpty() {
-        return top == -1;
+        return last == -1;
     }
 };
 
+
 class Stack : public List {
 public:
-    int peek() { //вернуть последний элемент
-        if (!isEmpty()) {
-            return arr[top];
-        }
-        else {
-            exit(EXIT_FAILURE);
-        }
-    }
+    using List::List;
 
-    int pop() { //удалить последний элемент
+    void tralala() { //удалить последний элемент
         if (isEmpty()) {
             cout << "Underflow\nProgram Terminated\n";
             exit(EXIT_FAILURE);
         }
 
-        cout << "Removing " << peek() << endl;
-        return arr[top--];
+        last--;
     }
 };
 
 class Queue : public List {
 public:
-    int peek() { //вернуть первый элемент
-        if (!isEmpty()) {
-            return arr[0];
-        }
-        else {
-            exit(EXIT_FAILURE);
-        }
-    }
+    using List::List;
 
-    int degueue() { //удалить первый элемент
+    void guzini() { //удалить первый элемент
         if (isEmpty()) {
             cout << "Underflow\nProgram Terminated\n";
             exit(EXIT_FAILURE);
         }
 
-        cout << "Removing: " << arr[0] << endl;
-        for (int i = 0; i < top - 1; i++) {
+        for (int i = 0; i < last - 1; i++) {
             arr[i] = arr[i + 1];
         }
-        top--;
-        return arr[0];
+
+        last--;
     }
 };
 
 
 int main()
 {
-    //пупупу
+    setlocale(LC_ALL, "Russian");
+
+    int c = 8;
+    char cc = 'k';
+    float ccc = 3.14;
+    string cccc = "trippi troppi";
+
+    //Создадим стэк
+    cout << "Создадим стэк" << endl;
+    Stack tralalero(4);
+    int s = tralalero.returnSize();
+    cout << "В стэке элементов: " << s << endl;
+
+    tralalero.push(&c);
+    tralalero.push(&cc);
+    tralalero.push(&ccc);
+    s = tralalero.returnSize();
+    cout << "В стэке элементов: " << s << endl;
+    tralalero.push(&cccc);
+    cout << "Удалим 1 элемент " << endl;
+    tralalero.tralala();
+    s = tralalero.returnSize();
+    cout << "В стэке элементов: " << s << endl;
+
+    cout << endl;
+
+    //Создадим очередь
+    cout << "Создадим очередь" << endl;
+    Queue bombombini(5);
+    int w = bombombini.returnSize();
+    cout << "В очереди элементов: " << w << endl;
+
+    bombombini.push(&c);
+    bombombini.push(&cc);
+    bombombini.push(&ccc);
+    bombombini.push(&cccc);
+    w = bombombini.returnSize();
+    cout << "В очереди элементов: " << w << endl;
+
+    cout << "Удалим 1 элемент " << endl;
+    bombombini.guzini();
+    w = bombombini.returnSize();
+    cout << "В очереди элементов: " << w << endl;
+
 }
