@@ -11,7 +11,7 @@ protected:
 
 public:
     List(int size = SIZE) {
-        arr = new void*[size]; //создание массива указателей
+        arr = new void* [size]; //создание массива указателей
         capasity = size;
         last = -1; //элемента с индексом 0 нет - массив пуст
     }
@@ -44,7 +44,7 @@ class Stack : public List {
 public:
     using List::List;
 
-    void tralala() { //удалить последний элемент
+    void del() { //удалить последний элемент
         if (isEmpty()) {
             cout << "Underflow\nProgram Terminated\n";
             exit(EXIT_FAILURE);
@@ -58,7 +58,7 @@ class Queue : public List {
 public:
     using List::List;
 
-    void guzini() { //удалить первый элемент
+    void del() { //удалить первый элемент
         if (isEmpty()) {
             cout << "Underflow\nProgram Terminated\n";
             exit(EXIT_FAILURE);
@@ -84,39 +84,39 @@ int main()
 
     //Создадим стэк
     cout << "Создадим стэк" << endl;
-    Stack tralalero(4);
-    int s = tralalero.returnSize();
+    Stack stack(4);
+    int s = stack.returnSize();
     cout << "В стэке элементов: " << s << endl;
 
-    tralalero.push(&c);
-    tralalero.push(&cc);
-    tralalero.push(&ccc);
-    s = tralalero.returnSize();
+    stack.push(&c);
+    stack.push(&cc);
+    stack.push(&ccc);
+    s = stack.returnSize();
     cout << "В стэке элементов: " << s << endl;
-    tralalero.push(&cccc);
+    stack.push(&cccc);
     cout << "Удалим 1 элемент " << endl;
-    tralalero.tralala();
-    s = tralalero.returnSize();
+    stack.del();
+    s = stack.returnSize();
     cout << "В стэке элементов: " << s << endl;
 
     cout << endl;
 
     //Создадим очередь
     cout << "Создадим очередь" << endl;
-    Queue bombombini(5);
-    int w = bombombini.returnSize();
+    Queue queue(5);
+    int w = queue.returnSize();
     cout << "В очереди элементов: " << w << endl;
 
-    bombombini.push(&c);
-    bombombini.push(&cc);
-    bombombini.push(&ccc);
-    bombombini.push(&cccc);
-    w = bombombini.returnSize();
+    queue.push(&c);
+    queue.push(&cc);
+    queue.push(&ccc);
+    queue.push(&cccc);
+    w = queue.returnSize();
     cout << "В очереди элементов: " << w << endl;
 
     cout << "Удалим 1 элемент " << endl;
-    bombombini.guzini();
-    w = bombombini.returnSize();
+    queue.del();
+    w = queue.returnSize();
     cout << "В очереди элементов: " << w << endl;
 
 }
