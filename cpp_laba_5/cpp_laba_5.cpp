@@ -1,122 +1,110 @@
 ﻿#include <iostream>
 #include <string>
+#include <cassert>
 using namespace std;
-#define SIZE 10
+
+struct Node {
+	string data;
+	Node* next;
+};
+
+//класс Список
+//Атрибуты: начало списка
+//Функции: конструктор
+//         ~деструктор
+//         добавить элемент (в начало)
+//         вернуть первый элемент
+//         печать всех значений
 
 class List {
 protected:
-    void** arr;
-    int last;
-    int capasity;
+	Node* head;
+	Node* last;
+	int size;
 
 public:
-    List(int size = SIZE) {
-        arr = new void* [size]; //создание массива указателей
-        capasity = size;
-        last = -1; //элемента с индексом 0 нет - массив пуст
-    }
+	List() : head(0), last(0), size(0) {}
+	
+	~List() { 
+		while (head != 0) {
+			Node* temp = head;
+			head = head->next;
+			delete temp;
+		}
+	}
 
-    template <typename T>
-    void push(T elem) { //добавить элемент
-        if (isFull()) {
-            cout << "Overflow\nProgram Terminated\n";
-            exit(EXIT_FAILURE);
-        }
+	void prepend(string data) {
+		Node* temp = new Node;
+		assert(temp != 0);
+		temp->data = data;
+		temp->next = head;
+		if (size == 1) {
+			last = head;
+		}
+		head = temp;
+		size++;
+	}
 
-        cout << "Insearting " << *elem << endl;
-        arr[++last] = elem;
-    }
+	Node* returnHead() const {
+		return head;
+	}
 
-    int returnSize() {
-        return last + 1;
-    }
+	void print() const {
+		Node* temp = head;
+		while (temp != 0) {
+			cout << temp->data << "->";
+			temp = temp->next;
+		}
+		cout << "end" << endl;
+	}
 
-    bool isFull() {
-        return last == capasity - 1;
-    }
-    bool isEmpty() {
-        return last == -1;
-    }
+	int returnSize() {
+		return size;
+	}
 };
-
 
 class Stack : public List {
 public:
-    using List::List;
-
-    void del() { //удалить последний элемент
-        if (isEmpty()) {
-            cout << "Underflow\nProgram Terminated\n";
-            exit(EXIT_FAILURE);
-        }
-
-        last--;
-    }
+	void del(){
+		assert(size != 0);
+		Node* temp = head;
+		head = head->next;
+		delete temp;
+		size--;
+	}
 };
 
 class Queue : public List {
 public:
-    using List::List;
-
-    void del() { //удалить первый элемент
-        if (isEmpty()) {
-            cout << "Underflow\nProgram Terminated\n";
-            exit(EXIT_FAILURE);
-        }
-
-        for (int i = 0; i < last - 1; i++) {
-            arr[i] = arr[i + 1];
-        }
-
-        last--;
-    }
+	void del() {
+		assert(size != 0);
+		Node* temp = head;
+	    while(last != temp->next)
+			temp = temp->next;
+		delete last;
+		last = temp;
+		last->next = 0;
+		size--;
+	}
 };
 
-
-int main()
-{
-    setlocale(LC_ALL, "Russian");
-
-    int c = 8;
-    char cc = 'k';
-    float ccc = 3.14;
-    string cccc = "trippi troppi";
-
-    //Создадим стэк
-    cout << "Создадим стэк" << endl;
-    Stack stack(4);
-    int s = stack.returnSize();
-    cout << "В стэке элементов: " << s << endl;
-
-    stack.push(&c);
-    stack.push(&cc);
-    stack.push(&ccc);
-    s = stack.returnSize();
-    cout << "В стэке элементов: " << s << endl;
-    stack.push(&cccc);
-    cout << "Удалим 1 элемент " << endl;
-    stack.del();
-    s = stack.returnSize();
-    cout << "В стэке элементов: " << s << endl;
-
-    cout << endl;
-
-    //Создадим очередь
-    cout << "Создадим очередь" << endl;
-    Queue queue(5);
-    int w = queue.returnSize();
-    cout << "В очереди элементов: " << w << endl;
-
-    queue.push(&c);
-    queue.push(&cc);
-    queue.push(&ccc);
-    queue.push(&cccc);
-    w = queue.returnSize();
-    cout << "В очереди элементов: " << w << endl;
-
-    cout << "Удалим 1 элемент " << endl;
-    queue.del();
-    w = queue.returnSize();
-    cout << "В очереди элементов: " << w << endl;
-
+int main() {
+	setlocale(LC_ALL, "Russian");
+	Stack frog;
+	frog.prepend("ква");
+	frog.prepend("кваква");
+	frog.prepend("квааа");
+	frog.print();
+	frog.del();
+	frog.print();
+	cout << "Размер frog: " << frog.returnSize() << endl;
+	Queue cat;
+	cat.prepend("мя");
+	cat.prepend("мяу");
+	cat.prepend("мрр");
+	cat.prepend("shhhh");
+	cat.print();
+	cat.del();
+	cat.print();
+	cout << "Размер cat: " << cat.returnSize() << endl;
 }
